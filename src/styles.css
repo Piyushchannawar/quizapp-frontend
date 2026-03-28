@@ -1,0 +1,340 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top left, #18181b, #020617);
+  color: #e4e4e7;
+}
+
+body.quiz-mode {
+  background: #020617;
+}
+
+body.quiz-mode .topbar {
+  display: none;
+}
+
+body.quiz-mode .main {
+  padding: 0;
+}
+
+body.quiz-mode .card {
+  max-width: none;
+  min-height: 100vh;
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  background: rgba(9, 9, 11, 0.95);
+  border-bottom: 1px solid rgba(63, 63, 70, 0.7);
+  backdrop-filter: blur(12px);
+}
+
+.logo {
+  font-weight: 700;
+  color: #fafafa;
+  text-decoration: none;
+}
+
+.topbar nav a {
+  margin-left: 1rem;
+  color: #a1a1aa;
+  text-decoration: none;
+}
+
+.topbar nav a:hover {
+  color: #f4f4f5;
+}
+
+.main {
+  padding: 2rem 1rem 3rem;
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  width: 100%;
+  max-width: 960px;
+  background: radial-gradient(circle at top left, #18181b, #020617);
+  border-radius: 1rem;
+  padding: 1.5rem 1.75rem 2rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(63, 63, 70, 0.9);
+}
+
+.card.narrow {
+  max-width: 480px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.card-actions > a,
+.card-actions > button {
+  text-decoration: none;
+  border-radius: 999px;
+}
+
+.link-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(82, 82, 91, 0.9);
+  background: rgba(24, 24, 27, 0.95);
+  color: #e4e4e7;
+  font-size: 0.85rem;
+}
+
+.link-button.primary {
+  border: none;
+  background: linear-gradient(to right, #a855f7, #22c55e);
+  color: #f9fafb;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+  gap: 0.25rem;
+}
+
+input,
+textarea,
+button {
+  font: inherit;
+}
+
+input,
+textarea {
+  padding: 0.55rem 0.65rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(82, 82, 91, 0.9);
+  background: rgba(9, 9, 11, 0.9);
+  color: #f4f4f5;
+}
+
+input:focus,
+textarea:focus {
+  outline: 2px solid #a855f7;
+  outline-offset: 1px;
+}
+
+button {
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  border: none;
+  background: rgba(24, 24, 27, 0.95);
+  color: #f4f4f5;
+  cursor: pointer;
+  border: 1px solid rgba(82, 82, 91, 0.9);
+}
+
+button.primary {
+  background: linear-gradient(to right, #a855f7, #22c55e);
+  border: none;
+}
+
+button.danger {
+  background: #b91c1c;
+  border: none;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.table th,
+.table td {
+  padding: 0.5rem 0.4rem;
+  border-bottom: 1px solid rgba(39, 39, 42, 0.9);
+}
+
+.table th {
+  text-align: left;
+  color: #a1a1aa;
+  font-weight: 500;
+}
+
+.table-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.table-actions .link-button-small {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.78rem;
+}
+
+.question-block {
+  margin-top: 0.75rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: 0.6rem;
+  background: rgba(24, 24, 27, 0.9);
+  border: 1px solid rgba(63, 63, 70, 0.9);
+}
+
+.question-meta-row {
+  margin-top: 0.25rem;
+  margin-bottom: 0.1rem;
+  font-size: 0.75rem;
+  color: #a1a1aa;
+}
+
+.options-grid {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.option-row {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 0.35rem;
+  flex-wrap: nowrap;
+  font-size: 0.85rem;
+}
+
+.option-text-input {
+  flex: 1 1 auto;
+  max-width: 260px;
+  padding: 0.4rem 0.6rem;
+}
+
+.option-correct {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: #e4e4e7;
+  white-space: nowrap;
+}
+
+.error {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  background: rgba(127, 29, 29, 0.35);
+  border: 1px solid rgba(248, 113, 113, 0.85);
+  color: #fee2e2;
+  font-size: 0.9rem;
+}
+
+.info {
+  margin-top: 0.75rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.5rem;
+  background: rgba(24, 24, 27, 0.9);
+  border: 1px solid rgba(161, 161, 170, 0.9);
+  font-size: 0.9rem;
+}
+
+.ai-panel {
+  margin-top: 0.5rem;
+  padding: 1rem 1rem 1.1rem;
+  border-radius: 0.65rem;
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  background: linear-gradient(
+    135deg,
+    rgba(88, 28, 135, 0.22),
+    rgba(22, 101, 52, 0.12)
+  );
+}
+
+.ai-panel-title {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.ai-panel-hint {
+  margin: 0 0 0.75rem;
+  font-size: 0.82rem;
+  color: #a1a1aa;
+  line-height: 1.45;
+}
+
+.ai-content-input {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.ai-count-row {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.ai-count-row input[type="number"] {
+  width: 5rem;
+}
+
+.manage-actions {
+  margin: 0.75rem 0 1rem;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.qr-section {
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 1.2rem 1rem 1.5rem;
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .card-actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+}
+
