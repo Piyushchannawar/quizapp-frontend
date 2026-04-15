@@ -6,6 +6,7 @@ export default function StudentQuiz() {
   const { code } = useParams();
   const [quiz, setQuiz] = useState(null);
   const [username, setUsername] = useState("");
+  const [rollNumber, setRollNumber] = useState("");
   const [hasStarted, setHasStarted] = useState(false);
   const [fullscreenEnabled, setFullscreenEnabled] = useState(false);
   const [answers, setAnswers] = useState({});
@@ -16,6 +17,7 @@ export default function StudentQuiz() {
 
   const submitLockRef = useRef(false);
   const usernameTrimmed = useMemo(() => username.trim(), [username]);
+  const rollNumberTrimmed = useMemo(() => rollNumber.trim(), [rollNumber]);
 
   useEffect(() => {
     async function load() {
@@ -37,8 +39,18 @@ export default function StudentQuiz() {
     return () => document.body.classList.remove("quiz-mode");
   }, [hasStarted, quiz?.status, result]);
 
-  function selectAnswer(qId, idx) {
-    setAnswers((prev) => ({ ...prev, [qId]: idx }));
+  function selectSingleAnswer(qId, idx) {
+    setAnswers((prev) => ({ ...prev, [qId]: [idx] }));
+  }
+
+  function toggleMultiAnswer(qId, idx) {
+    setAnswers((prev) => {
+      const current = Array.isArray(prev[qId]) ? prev[qId] : [];
+      const next = current.includes(idx)
+        ? current.filter((value) => value !== idx)
+        : [...current, idx];
+      return { ...prev, [qId]: next };
+    });
   }
 
   async function submitAnswers({ reason, isAutoSubmit }) {
@@ -49,11 +61,12 @@ export default function StudentQuiz() {
     setInfo("");
     const payloadAnswers = quiz.questions.map((q) => ({
       questionId: q.id,
-      selectedIndex: answers[q.id] ?? -1
+      selectedIndexes: Array.isArray(answers[q.id]) ? answers[q.id] : []
     }));
     try {
       const res = await api.post(`/quizzes/${code}/submissions`, {
         username: usernameTrimmed,
+        rollNumber: rollNumberTrimmed,
         answers: payloadAnswers,
         meta: {
           wasAutoSubmitted: !!isAutoSubmit,
@@ -104,6 +117,10 @@ export default function StudentQuiz() {
     }
     if (!usernameTrimmed) {
       setError("Please enter your name to start.");
+      return;
+    }
+    if (!rollNumberTrimmed) {
+      setError("Please enter your roll number to start.");
       return;
     }
 
@@ -194,6 +211,18 @@ export default function StudentQuiz() {
       <form onSubmit={handleSubmit} className="form">
         {!readOnly && !hasStarted && (
           <label>
+            Roll Number
+            <input
+              value={rollNumber}
+              onChange={(e) => setRollNumber(e.target.value)}
+              required
+              disabled={readOnly}
+            />
+          </label>
+        )}
+
+        {!readOnly && !hasStarted && (
+          <label>
             Your Name
             <input
               value={username}
@@ -212,7 +241,7 @@ export default function StudentQuiz() {
 
         {!readOnly && hasStarted && (
           <div className="info">
-            Student: <strong>{usernameTrimmed}</strong>
+            Student: <strong>{usernameTrimmed}</strong> ({rollNumberTrimmed})
           </div>
         )}
 
@@ -222,14 +251,25 @@ export default function StudentQuiz() {
               <h3>
                 Q{idx + 1}. {q.text}
               </h3>
+              <p className="question-helper">
+                {q.allowsMultiple
+                  ? "Multiple Choice: select one or more options."
+                  : "Single Choice: select exactly one option."}
+              </p>
               <div className="options-grid">
                 {q.options.map((opt, optIdx) => (
                   <label key={optIdx} className="option-row">
                     <input
-                      type="radio"
+                      type={q.allowsMultiple ? "checkbox" : "radio"}
                       name={`q-${q.id}`}
-                      checked={answers[q.id] === optIdx}
-                      onChange={() => selectAnswer(q.id, optIdx)}
+                      checked={
+                        Array.isArray(answers[q.id]) && answers[q.id].includes(optIdx)
+                      }
+                      onChange={() =>
+                        q.allowsMultiple
+                          ? toggleMultiAnswer(q.id, optIdx)
+                          : selectSingleAnswer(q.id, optIdx)
+                      }
                       disabled={readOnly || !hasStarted}
                     />
                     <span>{opt}</span>
